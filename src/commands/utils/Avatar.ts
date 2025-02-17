@@ -1,6 +1,5 @@
-import {
-    Message
-} from 'discord.js'
+import { Message } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { CommandModule } from '@src/classes/ModuleImports.js'
@@ -16,22 +15,22 @@ import { CommandDecorator } from '@src/utils/Decorators.js'
     aliases: ['pp', 'pdp', 'pfp']
 })
 export default class AvatarCommand extends CommandModule {
-    public async execute(client: Bot, command: Message, args: string[]): Promise<void | Message> {
+    public async execute(client: Bot, t:TFunction, command: Message, args: string[]): Promise<void | Message> {
         const user = await this.getMemberFromArg(command.guild, args[0] ?? command.author.id)
         if (!user)
-            return command.reply('L\'utilisateur indiqué n\'existe pas.')
+            return command.reply(t('commands.utils.avatar.noUser'))
 
         const globalAvatarURL = user.user.displayAvatarURL({ size: 4096 })
         const localAvatarURL = user.avatarURL({ size: 4096 })
 
         if (localAvatarURL) {
             return command.reply({
-                content: `Photos de profil [locale](${localAvatarURL}) et [globale](${globalAvatarURL}) de ${user}:`,
+                content: t('commands.utils.avatar.localPfp', { localUrl: localAvatarURL, globalUrl: globalAvatarURL, user: `${user}` }),
                 allowedMentions: { parse: [] }
             })
         }
         return command.reply({
-            content: `Photo de profil [globale](${globalAvatarURL}) de ${user}:`,
+            content: t('commands.utils.avatar.globalPfp', { globalUrl: globalAvatarURL, user: `${user}` }),
             allowedMentions: { parse: [] }
         })
     }

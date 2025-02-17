@@ -12,6 +12,9 @@ await i18next.init({
     defaultNS: 'translation',
     fallbackLng: 'fr',
     resources,
+    interpolation: {
+        escapeValue: false
+    }
 })
 
 export default i18next

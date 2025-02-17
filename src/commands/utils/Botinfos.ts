@@ -2,6 +2,7 @@ import {
     Message,
     EmbedBuilder
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { CommandModule } from '@src/classes/ModuleImports.js'
@@ -18,27 +19,27 @@ import { isBot } from '@src/utils/TypeGuards.js'
     aliases: ['bi']
 })
 export default class BotinfosCommand extends CommandModule {
-    public async execute(client: Bot, command: Message, args: string[]): Promise<void | Message> {
+    public async execute(client: Bot, t:TFunction, command: Message, args: string[]): Promise<void | Message> {
         const bot = (await client.database.Bot.findByPk(client.user?.id))?.get()
         if (!isBot(bot) || !client.user)
-            return command.reply('Une erreur est survenue lors de l\'éxécution de la commande.')
+            return command.reply(t('commands.execError'))
 
         const embed = new EmbedBuilder()
-            .setTitle('Bot informations')
+            .setTitle(t('commands.utils.botinfos.botInfos', { bot: `${client.user.username}` }))
             .addFields(
-                { name: 'Uptime', value: `The bot has been started <t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>`, inline: true },
-                { name: 'Start date', value: `<t:${Math.floor(client.readyTimestamp! / 1000)}>`, inline: true },
-                { name: 'Creation date', value: `<t:${Math.floor(client.user.createdTimestamp / 1000)}:R>`, inline: true},
-                { name: 'Ram usage', value: `L'utilisation de la RAM est actuellement de ${client.getRamUsage}MB.` },
-                { name: 'Total servers', value: `${client.guilds.cache.size}`, inline: true },
-                { name: 'Total users', value: `${client.users.cache.size}`, inline: true},
+                { name: 'Uptime', value: t('commands.utils.botinfos.uptime.value', { bot: `${client.user}`, time: `<t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>` }), inline: true },
+                { name: t('commands.utils.botinfos.startDate.name'), value: `<t:${Math.floor(client.readyTimestamp! / 1000)}>`, inline: true },
+                { name: t('commands.utils.botinfos.createDate.name'), value: `<t:${Math.floor(client.user.createdTimestamp / 1000)}:R>`, inline: true},
+                { name: t('commands.utils.botinfos.ramUsage.name'), value: t('commands.utils.botinfos.ramUsage.value', { bot: `${client.user}`, ramUsage: client.getRamUsage }) },
+                { name: t('commands.utils.botinfos.totalServers.name'), value: `${client.guilds.cache.size}`, inline: true },
+                { name: t('commands.utils.botinfos.totalUsers.name'), value: `${client.users.cache.size}`, inline: true},
                 { name: 'Ping', value: `${client.ws.ping}ms`, inline: true },
                 { name: 'Bot version', value: client.version, inline: true },
                 { name: 'Node.js version', value: process.version, inline: true}
             )
             .setImage(client.user.displayAvatarURL())
             .setFooter({
-                text: `Intéraction effectuée par ${command.author.username} | ${client.user.username} V${client.version}`,
+                text: t('commands.embedExecuted', { username: command.author.username, botUsername: client.user.username, version: client.version }),
                 iconURL: command.author.displayAvatarURL()
             })
             .setTimestamp()
