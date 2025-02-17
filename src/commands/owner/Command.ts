@@ -1,4 +1,5 @@
 import { Message, MessageReaction } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import Logger from '@src/classes/Logger.js'
@@ -17,7 +18,7 @@ const logger = Logger.getInstance('')
     aliases: ['cmd']
 })
 export default class CommandCommand extends CommandModule {
-    public async execute(client: Bot, command: Message, args: string[]): Promise<void | Message | MessageReaction> {
+    public async execute(client: Bot, t: TFunction, command: Message, args: string[]): Promise<void | Message | MessageReaction> {
         try {
             if (args.length < 2)
                 return command.react('❌')

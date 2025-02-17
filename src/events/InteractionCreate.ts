@@ -68,7 +68,7 @@ export default class InteractionCreate extends EventModule {
                 return
             }
 
-            await interactionCommand.execute(client, interaction)
+            await interactionCommand.execute(client, t, interaction)
             logger.simpleLog(`${interaction.user.username} executed the ${interactionCommand.name} interaction in ${interaction.channelId}.`)
             logger.logDiscordEmbed(client, new EmbedBuilder()
                 .setTitle('Intéraction exécutée ✅')

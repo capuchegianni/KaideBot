@@ -74,7 +74,7 @@ export default class MessageCreate extends EventModule {
                 return
             }
 
-            await command.execute(client, message, args)
+            await command.execute(client, t, message, args)
 
             logger.simpleLog(`${message.author.username} executed the ${commandName} command in ${message.channelId}.`)
             logger.logDiscordEmbed(client, new EmbedBuilder()

@@ -17,6 +17,7 @@ import {
     Role,
 } from 'discord.js'
 import { glob } from 'glob'
+import { TFunction } from 'i18next'
 
 import { TCategory } from '@src/types/Command.js'
 import {
@@ -33,7 +34,6 @@ const logger = Logger.getInstance('')
 
 export abstract class Module {
     public abstract name: string
-    public abstract execute(client: Bot, ...args: any[]): Promise<any>
 
     public async checkPermissions(command: CommandInteraction | Message, member: GuildMember | null, permissions: PermissionResolvable[]): Promise<boolean> {
         if (!member)
@@ -75,6 +75,8 @@ export abstract class CommandModule extends Module {
             this[optionKey] = getMetadata(optionKey, this.constructor)
         })
     }
+
+    public abstract execute(client: Bot, t: TFunction, ...args: any[]): Promise<any>
 
     public async getUserFromArg(client: Bot, arg: string | undefined): Promise<User | null> {
         if (!arg)
@@ -171,6 +173,8 @@ export abstract class EventModule extends Module {
             this[optionKey] = getMetadata(optionKey, this.constructor)
         })
     }
+
+    public abstract execute(client: Bot, ...args: any[]): Promise<any>
 }
 
 export abstract class InteractionModule extends Module {
@@ -189,6 +193,7 @@ export abstract class InteractionModule extends Module {
         })
     }
 
+    public abstract execute(client: Bot, t: TFunction, ...args: any[]): Promise<any>
     public abstract autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void>
 }
 
