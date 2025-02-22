@@ -11,6 +11,7 @@ import {
     ComponentType,
     PermissionsBitField
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import Logger from '@src/classes/Logger.js'
@@ -40,7 +41,7 @@ const logger = Logger.getInstance('')
 export default class RatioInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<any> {
+    public async execute(client: Bot, t:TFunction, interaction: ChatInputCommandInteraction): Promise<any> {
         const options = interaction.options as CommandInteractionOptionResolver
         const user = interaction.user
         const userToRatio = options.getUser('user', true)
@@ -53,7 +54,7 @@ export default class RatioInteraction extends InteractionModule {
             const flop = new ButtonBuilder().setCustomId('flop').setLabel(flopNbr + ' flop').setStyle(ButtonStyle.Danger)
             const row = new ActionRowBuilder<ButtonBuilder>().addComponents(ratio, flop)
             const msg = await interaction.reply({
-                content: `${user} veut ratio ${userToRatio}\n1 minute pour savoir si c'est mérité`,
+                content: t('commands.fun.ratio.wantToRatio', { user: `${user}`, userToRatio: `${userToRatio}` }),
                 components: [row]
             })
             const collector = msg.createMessageComponentCollector({
@@ -63,7 +64,7 @@ export default class RatioInteraction extends InteractionModule {
 
             collector.on('collect', async i => {
                 if (userIds.includes(i.user.id))
-                    return i.reply({ content: 'Essaie pas de voter deux fois', ephemeral: true })
+                    return i.reply({ content: t('commands.fun.ratio.oneVote'), ephemeral: true })
 
                 let reply = ''
 

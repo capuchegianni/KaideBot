@@ -1,4 +1,4 @@
-export default interface Resources {
+export default interface Translations {
     error: {
         'maintenance': string
     },

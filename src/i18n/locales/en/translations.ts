@@ -1,6 +1,6 @@
-import Resources from '@src/types/resources'
+import Translations from '@src/types/Translations'
 
-const translations: Resources = {
+const translations: Translations = {
     error: {
         'maintenance': '{{botName}} is not available for now.'
     },

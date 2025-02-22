@@ -109,7 +109,7 @@ export abstract class CommandModule extends Module {
         try {
             if (!userId)
                 throw Error()
-            return await server.members.fetch(userId)
+            return server.members.fetch(userId)
         } catch {
             const members = server.members.cache.map(cachedMember => ({
                 username: cachedMember.user.username,

@@ -25,6 +25,7 @@ import {
     InteractionContextType
 } from 'discord.js'
 import { Model } from 'sequelize'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import Logger from '@src/classes/Logger.js'
@@ -67,8 +68,8 @@ const logger = Logger.getInstance('')
 export default class TwitchInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
-        if (!await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild']))
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
+        if (!await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'], t))
             return
         if (client.set.has(JSON.stringify({ command: interaction.commandName, guildId: interaction.guildId }))) {
             return interaction.reply({

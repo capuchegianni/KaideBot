@@ -16,6 +16,7 @@ import {
     ApplicationIntegrationType,
     InteractionContextType,
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import Logger from '@src/classes/Logger.js'
@@ -157,13 +158,13 @@ const logger = Logger.getInstance('')
 export default class PunsInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
         const options = interaction.options as CommandInteractionOptionResolver
 
         switch (options.getSubcommandGroup()) {
             case 'configure':
-                await this._configureServer(client, interaction, options)
-                await this._configureChannel(client, interaction, options)
+                await this._configureServer(client, interaction, options, t)
+                await this._configureChannel(client, interaction, options, t)
                 await this._configureUser(client, interaction, options)
                 return
             case 'find':
@@ -171,13 +172,13 @@ export default class PunsInteraction extends InteractionModule {
                 await this._findByName(client, interaction, options)
                 return
             case 'remove':
-                await this._removeById(client, interaction, options)
-                await this._removeByName(client, interaction, options)
+                await this._removeById(client, interaction, options, t)
+                await this._removeByName(client, interaction, options, t)
                 return
         }
         switch (options.getSubcommand()) {
             case 'add':
-                return this._add(client, interaction, options)
+                return this._add(client, interaction, options, t)
             case 'list':
                 return this._list(client, interaction, options)
             case 'infos':
@@ -185,10 +186,10 @@ export default class PunsInteraction extends InteractionModule {
         }
     }
 
-    private async _configureServer(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver): Promise<void | InteractionResponse> {
+    private async _configureServer(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver, t:TFunction): Promise<void | InteractionResponse> {
         if (!(options.getSubcommand() === 'server'))
             return
-        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'])))
+        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'], t)))
             return
         try {
             const toEnable = options.getBoolean('enable', true)
@@ -207,10 +208,10 @@ export default class PunsInteraction extends InteractionModule {
         }
     }
 
-    private async _configureChannel(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver): Promise<void | InteractionResponse> {
+    private async _configureChannel(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver, t: TFunction): Promise<void | InteractionResponse> {
         if (!(options.getSubcommand() === 'channel'))
             return
-        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'])))
+        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'], t)))
             return
         try {
             const channel = options.getChannel('channel') || interaction.channel!
@@ -330,10 +331,10 @@ export default class PunsInteraction extends InteractionModule {
         }
     }
 
-    private async _removeById(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver): Promise<void | InteractionResponse> {
+    private async _removeById(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver, t: TFunction): Promise<void | InteractionResponse> {
         if (!(options.getSubcommand() === 'byid'))
             return
-        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'])))
+        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'], t)))
             return
         try {
             const id = options.getNumber('id', true)
@@ -356,10 +357,10 @@ export default class PunsInteraction extends InteractionModule {
         }
     }
 
-    private async _removeByName(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver): Promise<void | InteractionResponse> {
+    private async _removeByName(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver, t: TFunction): Promise<void | InteractionResponse> {
         if (!(options.getSubcommand() === 'byname'))
             return
-        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'])))
+        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'], t)))
             return
         try {
             const name = options.getString('name', true)
@@ -382,10 +383,10 @@ export default class PunsInteraction extends InteractionModule {
         }
     }
 
-    private async _add(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver): Promise<void | InteractionResponse> {
+    private async _add(client: Bot, interaction: ChatInputCommandInteraction, options: CommandInteractionOptionResolver, t: TFunction): Promise<void | InteractionResponse> {
         if (!(options.getSubcommand() === 'add'))
             return
-        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'])))
+        if (!(await this.checkPermissions(interaction, interaction.member as GuildMember, ['ManageGuild'], t)))
             return
         try {
             const toFind = options.getString('tofind', true).trim().toLowerCase()
