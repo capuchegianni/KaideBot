@@ -78,6 +78,7 @@ const translations: Resources = {
         },
         embedExecuted: 'Commande exécutée par {{username}} | {{botUsername}} V{{version}}',
         execError: 'Une erreur est survenue lors de l\'exécution de la commande.',
+        noPermissions: 'Vous n\'avez pas les permissions d\'effectuer cette action.',
     }
 }
 

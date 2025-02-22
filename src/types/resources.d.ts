@@ -5,6 +5,7 @@ export default interface Resources {
     commands: {
         embedExecuted: string,
         execError: string,
+        noPermissions: string,
         fun: {
             ratio: {
                 description: string,

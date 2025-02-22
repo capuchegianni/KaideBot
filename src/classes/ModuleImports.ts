@@ -35,13 +35,13 @@ const logger = Logger.getInstance('')
 export abstract class Module {
     public abstract name: string
 
-    public async checkPermissions(command: CommandInteraction | Message, member: GuildMember | null, permissions: PermissionResolvable[]): Promise<boolean> {
+    public async checkPermissions(command: CommandInteraction | Message, member: GuildMember | null, permissions: PermissionResolvable[], t: TFunction): Promise<boolean> {
         if (!member)
             return true
         for (const permission of permissions) {
             if (!member.permissions.has(permission)) {
                 command.reply({
-                    content: 'Vous n\'avez pas les permissions nécessaires pour effectuer cette action.',
+                    content: t('commands.noPermissions'),
                     ephemeral: true
                 })
                 return false

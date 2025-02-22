@@ -61,7 +61,7 @@ export default class HelpCommand extends CommandModule {
             embed.setTitle(t('commands.utils.help.commandsList'))
                 .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
                 .setDescription(t('commands.utils.help.availableCommandsList', {
-                    commandList: this._removeCommandWithNoAccess(command.member ?? command.author, client.modules.commands, command)
+                    commandList: this._removeCommandWithNoAccess(command.member ?? command.author, client.modules.commands, command, t)
                                     .map((commands) => `\`${prefix}${commands.name}\` - ${commands.description}`)
                                     .join('\n')
                 }))
@@ -69,7 +69,7 @@ export default class HelpCommand extends CommandModule {
         return command.reply({ embeds: [embed] })
     }
 
-    private _removeCommandWithNoAccess(user: GuildMember | User, commands: Collection<string, CommandModule>, message: Message): Collection<string, CommandModule> {
+    private _removeCommandWithNoAccess(user: GuildMember | User, commands: Collection<string, CommandModule>, message: Message, t: TFunction): Collection<string, CommandModule> {
         if (user.id === getSafeEnv(process.env.OWNER_ID, 'OWNER_ID'))
             return commands
 
@@ -78,7 +78,7 @@ export default class HelpCommand extends CommandModule {
         commands.forEach(async (command, key) => {
             if (command.category === 'owner')
                 return
-            if (isGuildMember(user) && await this.checkPermissions(message, user, command.permissions))
+            if (isGuildMember(user) && await this.checkPermissions(message, user, command.permissions, t))
                 filteredCommands.set(key, command)
         })
 

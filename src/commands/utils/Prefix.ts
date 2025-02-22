@@ -20,7 +20,7 @@ export default class PrefixCommand extends CommandModule {
         const prefix = (await client.database.getGuild(command.guildId!)).prefix
 
         if (newPrefix) {
-            if (!(await this.checkPermissions(command, command.member as GuildMember | null, ['ManageGuild'])))
+            if (!(await this.checkPermissions(command, command.member as GuildMember | null, ['ManageGuild'], t)))
                 return
             await client.database.Server.update(
                 { prefix: newPrefix },
