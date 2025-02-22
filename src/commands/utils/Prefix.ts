@@ -1,4 +1,5 @@
 import { GuildMember, Message } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { CommandModule } from '@src/classes/ModuleImports.js'
@@ -14,7 +15,7 @@ import { CommandDecorator } from '@src/utils/Decorators.js'
     aliases: []
 })
 export default class PrefixCommand extends CommandModule {
-    public async execute(client: Bot, command: Message, args: string[]): Promise<Message | void> {
+    public async execute(client: Bot, t: TFunction, command: Message, args: string[]): Promise<Message | void> {
         const newPrefix: string | undefined = args[0]
         const prefix = (await client.database.getGuild(command.guildId!)).prefix
 
@@ -25,8 +26,8 @@ export default class PrefixCommand extends CommandModule {
                 { prefix: newPrefix },
                 { where: { id: command.guildId! } }
             )
-            return command.reply(`Le prefix de ${client.user?.username} est désormais \`${newPrefix}\`.`)
+            return command.reply(t('commands.utils.prefix.prefixChanged', { botName: client.user?.username, prefix: newPrefix }))
         }
-        return command.reply(`Le préfixe de ${client.user?.username} est : \`${prefix}\``)
+        return command.reply(t('commands.utils.prefix.getPrefix', { botName: client.user?.username, prefix: prefix }))
     }
 }

@@ -52,16 +52,28 @@ const translations: Resources = {
                 }
             },
             help: {
-                description: ''
+                description: 'Affiche les commandes disponibles.',
+                commandNotFound: 'La commande {{commandName}} n\'existe pas.',
+                commandName: 'Commande `{{commandName}}` 📚',
+                commandInfos: 'Informations à propos de la commande demandée:',
+                noPermissions: 'Aucune permission requise.',
+                commandsList: 'Liste des commandes 📚',
+                availableCommandsList: 'Voici la liste des commandes disponibles:\n\n{{commandList}}'
             },
             lang: {
-                description: ''
+                description: 'Retourne ou modifie la langue utilisée par le bot pour vous répondre.',
+                answer: '{{botName}} vous répond en français.',
+                codeNotFound: 'Le code spécifié n\'est pas géré par {{botName}} ou il n\'existe pas.'
             },
             ping: {
-                description: ''
+                description: 'Affiche la latence du bot et de l\'API.',
+                success: 'Ping réalisé avec succès 🏓',
+                latency: '**Latence du bot:** {{clientPing}}ms\n**Latence de l\'API:** {{apiLatency}}ms'
             },
             prefix: {
-                description: ''
+                description: 'Retourne ou modifie le préfixe du serveur.',
+                prefixChanged: 'Le préfixe de {{botName}} est désormais `{{prefix}}`.',
+                getPrefix: 'Le préfixe de {{botName}} est `{{prefix}}`.'
             }
         },
         embedExecuted: 'Commande exécutée par {{username}} | {{botUsername}} V{{version}}',

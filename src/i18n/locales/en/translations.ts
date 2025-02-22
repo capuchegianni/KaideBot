@@ -52,16 +52,28 @@ const translations: Resources = {
                 }
             },
             help: {
-                description: ''
+                description: 'Display the available commands.',
+                commandNotFound: 'Command {{commandName}} does not exist.',
+                commandName: 'Command {{commandName}}',
+                commandInfos: 'Informations about the requested command:',
+                noPermissions: 'No permission requested.',
+                commandsList: 'Command list 📚',
+                availableCommandsList: 'Here is the list of the available commands:\n\n{{commandList}}'
             },
             lang: {
-                description: ''
+                description: 'Return or modify the language used by the bot to answer you.',
+                answer: '{{botName}} answers you in english.',
+                codeNotFound: 'The specified code is not handled by {{botName}} or does not exist.'
             },
             ping: {
-                description: ''
+                description: 'Display the bot and API latency.',
+                success: 'Pinged successfully 🏓',
+                latency: '**Client Latency:** {{clientPing}}ms\n**API latency:** {{apiLatency}}ms'
             },
             prefix: {
-                description: ''
+                description: 'Return or modify the server prefix.',
+                prefixChanged: '{{botName}} prefix is now `{{prefix}}`.',
+                getPrefix: '{{botName}} prefix is `{{prefix}}`.'
             }
         },
         embedExecuted: 'Command executed by {{username}} | {{botUsername}} V{{version}}',

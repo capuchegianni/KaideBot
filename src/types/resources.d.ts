@@ -55,15 +55,27 @@ export default interface Resources {
             },
             help: {
                 description: string
+                commandNotFound: string
+                commandName: string
+                commandInfos: string
+                noPermissions: string
+                commandsList: string
+                availableCommandsList: string
             },
             lang: {
                 description: string
+                answer: string
+                codeNotFound: string
             },
             ping: {
                 description: string
+                success: string
+                latency: string
             },
             prefix: {
                 description: string
+                prefixChanged: string
+                getPrefix: string
             }
         }
     }

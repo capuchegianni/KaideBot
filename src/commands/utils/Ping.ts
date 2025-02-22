@@ -1,4 +1,5 @@
 import { Message, EmbedBuilder } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { CommandModule } from '@src/classes/ModuleImports.js'
@@ -14,22 +15,22 @@ import { CommandDecorator } from '@src/utils/Decorators.js'
     aliases: []
 })
 export default class PingCommand extends CommandModule {
-    public async execute(client: Bot, command: Message): Promise<void> {
+    public async execute(client: Bot, t: TFunction, command: Message): Promise<void> {
         const sent = await command.reply({
             content: 'Pinging...',
         })
         const embed = new EmbedBuilder()
-            .setTitle('Pinged Successfully 🏓')
-            .setDescription(`**Client Latency:** ${client.ws.ping}ms\n**API latency:** ${sent.createdTimestamp - command.createdTimestamp}ms`)
+            .setTitle(t('commands.utils.ping.success'))
+            .setDescription(t('commands.utils.ping.latency', { clientPing: client.ws.ping, apiLatency: sent.createdTimestamp - command.createdTimestamp }))
             .setFooter({
-                text: `Commande effectuée par ${command.author.username} | ${client.user?.username} V${client.version}`,
+                text: t('commands.embedExecuted', { username: command.author.username, botUsername: client.user?.username, version: client.version }),
                 iconURL: command.author.displayAvatarURL()
             })
             .setTimestamp()
             .setColor(`#ffc800`)
 
         sent.edit({
-            content: 'Pinged successfully !',
+            content: t('commands.utils.ping.success'),
             embeds: [embed]
         })
     }

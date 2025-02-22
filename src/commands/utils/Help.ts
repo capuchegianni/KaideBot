@@ -5,11 +5,12 @@ import {
     Collection,
     User
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { CommandModule } from '@src/classes/ModuleImports.js'
 import { CommandDecorator } from '@src/utils/Decorators.js'
-import { getSafeEnv, isTruthy } from '@src/utils/TypeGuards.js'
+import { getSafeEnv } from '@src/utils/TypeGuards.js'
 
 @CommandDecorator({
     name: 'help',
@@ -21,11 +22,11 @@ import { getSafeEnv, isTruthy } from '@src/utils/TypeGuards.js'
     aliases: ['h', 'aide']
 })
 export default class HelpCommand extends CommandModule {
-    public async execute(client: Bot, command: Message, args: string[]): Promise<void | Message> {
+    public async execute(client: Bot, t:TFunction, command: Message, args: string[]): Promise<void | Message> {
         const commandName: string | undefined = args[0]
         const embed = new EmbedBuilder()
             .setFooter({
-                text: `Intéraction effectuée par ${command.author.username} | ${client.user?.username} V${client.version}`,
+                text: t('commands.embedExecuted', { username: command.author.username, botUsername: client.user?.username, version: client.version }),
                 iconURL: command.author.displayAvatarURL()
             })
             .setTimestamp()
@@ -35,9 +36,9 @@ export default class HelpCommand extends CommandModule {
             const cmd = client.modules.commands.find(cmd => cmd.name === commandName)
 
             if (!cmd)
-                return command.reply(`La commande \`${commandName}\` n'existe pas !`)
-            embed.setTitle(`Commande \`${cmd.name}\` 📚`)
-                .setDescription('Voici les informations sur la commande demandée :')
+                return command.reply(t('commands.utils.help.commandNotFound', { commandName }))
+            embed.setTitle(t('commands.utils.help.commandName', { commandName: cmd.name }))
+                .setDescription(t('commands.utils.help.commandInfos'))
                 .addFields(
                     {
                         name: 'Description',
@@ -50,16 +51,20 @@ export default class HelpCommand extends CommandModule {
                     },
                     {
                         name: 'Permissions',
-                        value: cmd.permissions.length ? cmd.permissions.map(perm => perm).join(', ') : 'Aucune permission requise.',
+                        value: cmd.permissions.length ? cmd.permissions.map(perm => perm).join(', ') : t('commands.utils.help.noPermissions'),
                         inline: true
                     }
                 )
         } else {
             const prefix = command.guildId ? (await client.database.getGuild(command.guildId)).prefix : client.user?.username
 
-            embed.setTitle('Liste des commandes 📚')
+            embed.setTitle(t('commands.utils.help.commandsList'))
                 .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-                .setDescription(`Voici la liste des intéractions disponibles :\n\n${this._removeCommandWithNoAccess(command.member as GuildMember ?? command.author, client.modules.commands, command).map((commands) => `\`${prefix}${commands.name}\` - ${commands.description}`).join('\n')}`)
+                .setDescription(t('commands.utils.help.availableCommandsList', {
+                    commandList: this._removeCommandWithNoAccess(command.member ?? command.author, client.modules.commands, command)
+                                    .map((commands) => `\`${prefix}${commands.name}\` - ${commands.description}`)
+                                    .join('\n')
+                }))
         }
         return command.reply({ embeds: [embed] })
     }
