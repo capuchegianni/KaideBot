@@ -12,6 +12,7 @@ import {
     InteractionContextType
 } from 'discord.js'
 import Fuse from 'fuse.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { InteractionModule } from '@src/classes/ModuleImports.js'
@@ -62,12 +63,12 @@ export default class Help extends InteractionModule {
         )
     }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<InteractionResponse> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<InteractionResponse> {
         const options = interaction.options as CommandInteractionOptionResolver
         const interactionName = options.getString('commande')
         const embed = new EmbedBuilder()
             .setFooter({
-                text: `Intéraction effectuée par ${interaction.user.username} | ${client.user?.username} V${client.version}`,
+                text: t('interactions.embedExecuted', { username: interaction.user.username, botUsername: client.user?.username, version: client.version }),
                 iconURL: interaction.user.displayAvatarURL()
             })
             .setTimestamp()
@@ -78,12 +79,11 @@ export default class Help extends InteractionModule {
 
             if (!cmd) {
                 return interaction.reply({
-                    content: `La commande \`${interactionName}\` n'existe pas !`,
+                    content: t('interactions.utils.help.interactionNotFound', { interactionName: interactionName }),
                     ephemeral: true
                 })
             }
-            embed.setTitle(`Commande \`${cmd.data.name}\` 📚`)
-                .setDescription('Voici les informations sur l\'intéraction demandée :')
+            embed.setTitle(t('interactions.utils.help.interactionName', { interactionName: cmd.data.name }))
                 .addFields(
                     {
                         name: 'Description',
@@ -96,30 +96,34 @@ export default class Help extends InteractionModule {
                     },
                     {
                         name: 'Permissions',
-                        value: this._formatPermission(cmd.data.default_member_permissions),
+                        value: this._formatPermission(cmd.data.default_member_permissions, t),
                         inline: true
                     },
                     {
                         name: 'Options',
-                        value: cmd.data.options.length ? `>>> ${cmd.data.options.map((option) => `\`${option.toJSON().name}\`: ${option.toJSON().description} - ${option.toJSON().required ? 'requis' : 'non requis'}`).join('\n')}` : 'Aucune option disponible'
+                        value: cmd.data.options.length ? `>>> ${cmd.data.options.map((option) => `\`${option.toJSON().name}\`: ${option.toJSON().description} - ${option.toJSON().required ? t('interactions.utils.help.options.required') : t('interactions.utils.help.options.optional')}`).join('\n')}` : t('interactions.utils.help.options.noOptions')
                     }
                 )
         } else {
-            embed.setTitle('Liste des commandes 📚')
+            embed.setTitle(t('interactions.utils.help.interactionsList'))
                 .setURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-                .setDescription(`Voici la liste des intéractions disponibles :\n\n${this._removeInteractionWithNoAccess(interaction, client.modules.interactions).map((interactions) => `\`/${interactions.data.name}\` - ${interactions.data.description}`).join('\n')}`)
+                .setDescription(t('interactions.utils.help.availableInteractionsList', {
+                    interactionList: this._removeInteractionWithNoAccess(interaction, client.modules.interactions)
+                        .map((interactions) => `\`/${interactions.data.name}\` - ${interactions.data.description}`)
+                        .join('\n')
+                }))
         }
         return interaction.reply({ embeds: [embed] })
     }
 
-    private _formatPermission(permissionValue: string | null | undefined): string {
+    private _formatPermission(permissionValue: string | null | undefined, t: TFunction): string {
         if (!isTruthy(permissionValue))
-            return 'Aucune permission requise'
+            return t('interactions.utils.help.noPermissions')
 
         const permissionBigInt = BigInt(permissionValue)
         return Object.keys(PermissionsBitField.Flags).find(key =>
             PermissionsBitField.Flags[key as keyof typeof PermissionsBitField.Flags] === permissionBigInt
-        ) || 'Aucune permission requise'
+        ) || t('interactions.utils.help.noPermissions')
     }
 
     private _removeInteractionWithNoAccess(interaction: Interaction, interactions: Collection<string, InteractionModule>): Collection<string, InteractionModule> {

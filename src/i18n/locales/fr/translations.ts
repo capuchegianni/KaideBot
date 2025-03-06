@@ -2,7 +2,8 @@ import Translations from '@src/types/Translations'
 
 const translations: Translations = {
     error: {
-        'maintenance': '{{botName}} n\'est pas disponible pour le moment'
+        maintenance: '{{botName}} n\'est pas disponible pour le moment',
+        noPermissions: 'Vous n\'avez pas les permissions d\'effectuer cette action.'
     },
     commands: {
         fun: {
@@ -13,7 +14,7 @@ const translations: Translations = {
                 oneVote: 'Essaie pas de voter deux fois coquin.'
             }
         },
-        moderation: {},
+        moderation: { },
         utils: {
             avatar: {
                 description: 'Affiche la photo de profil du membre sélectionné.',
@@ -31,31 +32,20 @@ const translations: Translations = {
             botinfos: {
                 description: 'Affiche diverses informations à propos de {{bot}}.',
                 botInfos: 'Informations sur {{bot}}',
-                uptime: {
-                    value: 'Mise en ligne {{time}}.'
-                },
-                startDate: {
-                    name: 'Date de démarrage',
-                },
-                createDate: {
-                    name: 'Date de création',
-                },
+                uptime: 'Mise en ligne {{time}}.',
+                startDate: 'Date de démarrage',
+                createDate: 'Date de création',
                 ramUsage: {
                     name: 'Utilisation de la RAM',
                     value: '{{bot}} utilise actuellement {{ramUsage}}MB de RAM.'
                 },
-                totalServers: {
-                    name: 'Serveurs',
-                },
-                totalUsers: {
-                    name: 'Utilisateurs',
-                }
+                totalServers: 'Serveurs',
+                totalUsers: 'Utilisateurs'
             },
             help: {
                 description: 'Affiche les commandes disponibles.',
                 commandNotFound: 'La commande {{commandName}} n\'existe pas.',
                 commandName: 'Commande `{{commandName}}` 📚',
-                commandInfos: 'Informations à propos de la commande demandée:',
                 noPermissions: 'Aucune permission requise.',
                 commandsList: 'Liste des commandes 📚',
                 availableCommandsList: 'Voici la liste des commandes disponibles:\n\n{{commandList}}'
@@ -78,7 +68,32 @@ const translations: Translations = {
         },
         embedExecuted: 'Commande exécutée par {{username}} | {{botUsername}} V{{version}}',
         execError: 'Une erreur est survenue lors de l\'exécution de la commande.',
-        noPermissions: 'Vous n\'avez pas les permissions d\'effectuer cette action.',
+    },
+    interactions: {
+        embedExecuted: 'Intéraction exécutée par {{username}} | {{botUsername}} V{{version}}',
+        execError: 'Une erreur est survenue lors de l\'exécution de l\'intéraction.',
+        fun: { },
+        moderation: { },
+        utils: {
+            help: {
+                description: 'Affiche les intéractions disponibles.',
+                interactionNotFound: 'La commande {{interactionName}} n\'existe pas.',
+                interactionName: 'Commande `{{interactionName}}` 📚',
+                noPermissions: 'Aucune permission requise.',
+                interactionsList: 'Liste des intéractions 📚',
+                availableInteractionsList: 'Voici la liste des intéractions disponibles:\n\n{{interactionList}}',
+                options: {
+                    optional: 'Optionnel',
+                    required: 'Requis',
+                    noOptions: 'Aucune option disponible'
+                }
+            },
+            urlshorten: {
+                description: 'Crée un lien raccourci à partir de l\'url fournie.',
+                invalidUrl: 'Merci de fournir une url valide.',
+                shortenedUrl: '[Voici le lien raccourci](https://{{shortenedUrl}}) créé à partir de {{urlToShorten}}.'
+            }
+        }
     }
 }
 

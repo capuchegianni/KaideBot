@@ -8,6 +8,7 @@ import {
     ApplicationIntegrationType,
     InteractionContextType
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { InteractionModule } from '@src/classes/ModuleImports.js'
@@ -29,23 +30,23 @@ import { InteractionDecorator } from '@src/utils/Decorators.js'
 export default class PingInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<Message> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<Message> {
         const sent = await interaction.reply({
             content: 'Pinging...',
             fetchReply: true
         })
         const embed = new EmbedBuilder()
-            .setTitle('Pinged Successfully 🏓')
-            .setDescription(`**Client Latency:** ${client.ws.ping}ms\n**API latency:** ${sent.createdTimestamp - interaction.createdTimestamp}ms`)
+            .setTitle(t('commands.utils.ping.success'))
+            .setDescription(t('commands.utils.ping.latency', { clientPing: client.ws.ping, apiLatency: sent.createdTimestamp - interaction.createdTimestamp }))
             .setFooter({
-                text: `Intéraction effectuée par ${interaction.user.username} | ${client.user?.username} V${client.version}`,
+                text: t('interactions.embedExecuted', { username: interaction.user.username, botUsername: client.user?.username, version: client.version }),
                 iconURL: interaction.user.displayAvatarURL()
             })
             .setTimestamp()
             .setColor(`#ffc800`)
 
         return interaction.editReply({
-            content: 'Pinged successfully !',
+            content: t('commands.utils.ping.success'),
             embeds: [embed]
         })
     }

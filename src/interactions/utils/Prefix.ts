@@ -9,6 +9,7 @@ import {
     ApplicationIntegrationType,
     InteractionContextType
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { InteractionModule } from '@src/classes/ModuleImports.js'
@@ -35,7 +36,7 @@ import { InteractionDecorator } from '@src/utils/Decorators.js'
 export default class PrefixInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
         if (!interaction.guildId)
             return interaction.reply('Vous devez être dans un serveur pour utiliser cette intéraction.')
 
@@ -44,14 +45,14 @@ export default class PrefixInteraction extends InteractionModule {
         const prefix = (await client.database.getGuild(interaction.guildId)).prefix
 
         if (newPrefix) {
-            if (!(await this.checkPermissions(interaction, interaction.member as GuildMember | null, ['ManageGuild'])))
+            if (!(await this.checkPermissions(interaction, interaction.member as GuildMember | null, ['ManageGuild'], t)))
                 return
             await client.database.Server.update(
                 { prefix: newPrefix },
                 { where: { id: interaction.guildId } }
             )
-            return interaction.reply(`Le prefix de ${client.user?.username} est désormais \`${newPrefix}\`.`)
+            return interaction.reply(t('commands.utils.prefix.prefixChanged', { botName: client.user?.username, prefix: newPrefix }))
         }
-        return interaction.reply(`Le préfixe de ${client.user?.username} est : \`${prefix}\``)
+        return interaction.reply(t('commands.utils.prefix.getPrefix', { botName: client.user?.username, prefix: prefix }))
     }
 }

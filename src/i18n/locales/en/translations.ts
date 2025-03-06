@@ -2,7 +2,8 @@ import Translations from '@src/types/Translations'
 
 const translations: Translations = {
     error: {
-        'maintenance': '{{botName}} is not available for now.'
+        maintenance: '{{botName}} is not available for now.',
+        noPermissions: 'You don\'t have the permissions to do this action.'
     },
     commands: {
         fun: {
@@ -13,7 +14,7 @@ const translations: Translations = {
                 oneVote: 'Don\'t try to vote two times silly one.'
             }
         },
-        moderation: {},
+        moderation: { },
         utils: {
             avatar: {
                 description: 'Display the profile picture of the selected member.',
@@ -31,31 +32,20 @@ const translations: Translations = {
             botinfos: {
                 description: 'Display misc informations about {{bot}}.',
                 botInfos: '{{bot}} informations',
-                uptime: {
-                    value: '{{bot}} has been started {{time}}.'
-                },
-                startDate: {
-                    name: 'Start date',
-                },
-                createDate: {
-                    name: 'Creation date',
-                },
+                uptime: '{{bot}} has been started {{time}}.',
+                startDate: 'Start date',
+                createDate: 'Creation date',
                 ramUsage: {
                     name: 'RAM usage',
                     value: '{{bot}} currently uses {{ramUsage}}MB of RAM.'
                 },
-                totalServers: {
-                    name: 'Servers',
-                },
-                totalUsers: {
-                    name: 'Users',
-                }
+                totalServers: 'Servers',
+                totalUsers: 'Users'
             },
             help: {
                 description: 'Display the available commands.',
                 commandNotFound: 'Command {{commandName}} does not exist.',
                 commandName: 'Command {{commandName}}',
-                commandInfos: 'Informations about the requested command:',
                 noPermissions: 'No permission requested.',
                 commandsList: 'Command list 📚',
                 availableCommandsList: 'Here is the list of the available commands:\n\n{{commandList}}'
@@ -78,7 +68,32 @@ const translations: Translations = {
         },
         embedExecuted: 'Command executed by {{username}} | {{botUsername}} V{{version}}',
         execError: 'An error happenned when executing the command.',
-        noPermissions: 'You don\'t have the permissions to do this action.'
+    },
+    interactions: {
+        embedExecuted: 'Interaction executed by {{username}} | {{botUsername}} V{{version}}',
+        execError: 'An error happenned when executing the interaction.',
+        fun: { },
+        moderation: { },
+        utils: {
+            help: {
+                description: 'Display the available commands.',
+                interactionNotFound: 'Interaction {{interactionName}} does not exist.',
+                interactionName: 'Interaction {{interactionName}}',
+                noPermissions: 'No permission requested.',
+                interactionsList: 'Interaction list 📚',
+                availableInteractionsList: 'Here is the list of the available interactions:\n\n{{interactionList}}',
+                options: {
+                    optional: 'Optional',
+                    required: 'Required',
+                    noOptions: 'No option available'
+                }
+            },
+            urlshorten: {
+                description: 'Create a new link pointing to the selected link.',
+                invalidUrl: 'Please provide a valid url.',
+                shortenedUrl: '[Here is the shortened link](https://{{shortenedUrl}}) created from {{urlToShorten}}.'
+            }
+        }
     }
 }
 

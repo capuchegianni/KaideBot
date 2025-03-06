@@ -8,14 +8,15 @@ import {
     ApplicationIntegrationType,
     InteractionContextType
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { InteractionModule } from '@src/classes/ModuleImports.js'
 import { InteractionDecorator } from '@src/utils/Decorators.js'
 
 const langs: Record<string, string> = {
-    fr: 'français',
-    en: 'english'
+    fr: 'vous répondra désormais en français.',
+    en: 'will now answer you in english.'
 }
 
 @InteractionDecorator({
@@ -39,29 +40,27 @@ const langs: Record<string, string> = {
 export default class PrefixInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> {
         const choices = Object.entries(langs).map(([code, language]) => ({
-            name: language,
+            name: code,
             value: code,
         }))
 
         return interaction.respond(choices)
     }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<void | InteractionResponse> {
         const options = interaction.options as CommandInteractionOptionResolver
         const newLang = options.getString('lang')
-        const userRecord = await client.database.User.findByPk(interaction.user.id)
-        const currentLang = userRecord?.get().lang || 'fr'
 
         if (!newLang)
-            return interaction.reply(`${client.user?.username} vous répond en ${langs[currentLang] || 'fr'}`)
+            return interaction.reply(t('commands.utils.lang.answer', { botName: client.user?.username }))
 
         if (!(newLang in langs))
-            return interaction.reply(`Le code spécifié n'existe pas.`)
+            return interaction.reply(t('commands.utils.lang.codeNotFound', { botName: client.user?.username }))
 
         await client.database.User.update(
             { lang: newLang },
             { where: { id: interaction.user.id } }
         )
-        return interaction.reply(`${client.user?.username} vous répondra désormais en ${langs[newLang]}`)
+        return interaction.reply(`${client.user?.username} ${langs[newLang]}`)
     }
 }

@@ -8,6 +8,7 @@ import {
     ApplicationIntegrationType,
     InteractionContextType
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { InteractionModule } from '@src/classes/ModuleImports.js'
@@ -36,7 +37,7 @@ import settings from '../../../settings.json' with { 'type': 'json' }
 export default class UrlShortenInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<InteractionResponse> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<InteractionResponse> {
         const options = interaction.options as CommandInteractionOptionResolver
         const urlToShorten = options.getString('url')
         const rebrandlyUrl = 'https://api.rebrandly.com/v1/links'
@@ -50,11 +51,14 @@ export default class UrlShortenInteraction extends InteractionModule {
             body: data
         })
 
-        if (!response.ok)
-            return interaction.reply(`Merci de fournir un url valide.`)
+        if (!response.ok) {
+            if (response.status === 400)
+                return interaction.reply(t('interactions.utils.urlshorten.invalidUrl'))
+            return interaction.reply(t('interactions.execError'))
+        }
 
         const jsonResponse = await response.json()
 
-        return interaction.reply(`https://${jsonResponse.shortUrl}`)
+        return interaction.reply(t('interactions.utils.urlshorten.shortenedUrl', { shortenedUrl: jsonResponse.shortUrl, urlToShorten: urlToShorten }))
     }
 }

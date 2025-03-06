@@ -9,6 +9,7 @@ import {
     ApplicationIntegrationType,
     InteractionContextType
 } from 'discord.js'
+import { TFunction } from 'i18next'
 
 import Bot from '@src/classes/Bot.js'
 import { InteractionModule } from '@src/classes/ModuleImports.js'
@@ -38,7 +39,7 @@ import { InteractionDecorator } from '@src/utils/Decorators.js'
 export default class AvatarInteraction extends InteractionModule {
     public async autoComplete(client: Bot, interaction: AutocompleteInteraction): Promise<void> { }
 
-    public async execute(client: Bot, interaction: ChatInputCommandInteraction): Promise<InteractionResponse> {
+    public async execute(client: Bot, t: TFunction, interaction: ChatInputCommandInteraction): Promise<InteractionResponse> {
         const options = interaction.options as CommandInteractionOptionResolver
         const user = options.getUser('utilisateur') ?? interaction.user
         const isColor = options.getBoolean('couleur') ?? false
@@ -48,7 +49,7 @@ export default class AvatarInteraction extends InteractionModule {
         if (isColor) {
             if (!fetchedUser.hexAccentColor) {
                 return interaction.reply({
-                    content: `${fetchedUser} n'a pas de bannière.`,
+                    content: t('commands.utils.banner.noBanner', { user: `${fetchedUser}` }),
                     allowedMentions: { parse: [] }
                 })
             }
@@ -57,13 +58,15 @@ export default class AvatarInteraction extends InteractionModule {
                 .setColor(fetchedUser.hexAccentColor)
 
             return interaction.reply({
-                content: `La bannière de ${fetchedUser} est ${fetchedUser.hexAccentColor}.`,
+                content: t('commands.utils.banner.bannerColor', { user: `${user}`, color: fetchedUser.hexAccentColor }),
                 embeds: [ embed ],
                 allowedMentions: { parse: [] }
             })
         }
         return interaction.reply({
-            content: bannerUrl ? `[Bannière](${bannerUrl}) de ${fetchedUser} :` : `${fetchedUser} ne possède pas de bannière.`,
+            content: bannerUrl ?
+                t('commands.utils.banner.globalBanner', { bannerUrl: bannerUrl, user: `${user}` }) :
+                t('commands.utils.banner.noBanner', { user: `${user}` }),
             allowedMentions: { parse: [] }
         })
     }
