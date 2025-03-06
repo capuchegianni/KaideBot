@@ -14,7 +14,7 @@ import { getSafeEnv } from '@src/utils/TypeGuards.js'
 
 @CommandDecorator({
     name: 'help',
-    description: 'Affiche les intéractions disponibles.',
+    description: 'Affiche les commandes disponibles.',
     cooldown: 3,
     permissions: [],
     category: 'utils',
@@ -38,7 +38,6 @@ export default class HelpCommand extends CommandModule {
             if (!cmd)
                 return command.reply(t('commands.utils.help.commandNotFound', { commandName }))
             embed.setTitle(t('commands.utils.help.commandName', { commandName: cmd.name }))
-                .setDescription(t('commands.utils.help.commandInfos'))
                 .addFields(
                     {
                         name: 'Description',

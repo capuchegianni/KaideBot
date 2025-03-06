@@ -41,7 +41,7 @@ export abstract class Module {
         for (const permission of permissions) {
             if (!member.permissions.has(permission)) {
                 command.reply({
-                    content: t('commands.noPermissions'),
+                    content: t('error.noPermissions'),
                     ephemeral: true
                 })
                 return false

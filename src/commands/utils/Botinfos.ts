@@ -27,12 +27,12 @@ export default class BotinfosCommand extends CommandModule {
         const embed = new EmbedBuilder()
             .setTitle(t('commands.utils.botinfos.botInfos', { bot: `${client.user.username}` }))
             .addFields(
-                { name: 'Uptime', value: t('commands.utils.botinfos.uptime.value', { bot: `${client.user}`, time: `<t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>` }), inline: true },
-                { name: t('commands.utils.botinfos.startDate.name'), value: `<t:${Math.floor(client.readyTimestamp! / 1000)}>`, inline: true },
-                { name: t('commands.utils.botinfos.createDate.name'), value: `<t:${Math.floor(client.user.createdTimestamp / 1000)}:R>`, inline: true},
+                { name: 'Uptime', value: t('commands.utils.botinfos.uptime', { bot: `${client.user}`, time: `<t:${Math.floor((Date.now() - client.uptime!) / 1000)}:R>` }), inline: true },
+                { name: t('commands.utils.botinfos.startDate'), value: `<t:${Math.floor(client.readyTimestamp! / 1000)}>`, inline: true },
+                { name: t('commands.utils.botinfos.createDate'), value: `<t:${Math.floor(client.user.createdTimestamp / 1000)}:R>`, inline: true},
                 { name: t('commands.utils.botinfos.ramUsage.name'), value: t('commands.utils.botinfos.ramUsage.value', { bot: `${client.user}`, ramUsage: client.getRamUsage }) },
-                { name: t('commands.utils.botinfos.totalServers.name'), value: `${client.guilds.cache.size}`, inline: true },
-                { name: t('commands.utils.botinfos.totalUsers.name'), value: `${client.users.cache.size}`, inline: true},
+                { name: t('commands.utils.botinfos.totalServers'), value: `${client.guilds.cache.size}`, inline: true },
+                { name: t('commands.utils.botinfos.totalUsers'), value: `${client.users.cache.size}`, inline: true},
                 { name: 'Ping', value: `${client.ws.ping}ms`, inline: true },
                 { name: 'Bot version', value: client.version, inline: true },
                 { name: 'Node.js version', value: process.version, inline: true}
